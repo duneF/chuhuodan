@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="mapper.ChuHuoDanMapper">
+    <insert id="add" parameterType="bean.ChuHuoDan">
+    insert into chuhuodan (id,createtime, jiliangdanwei, shouhuodanwei, dengjiqiangdu, jiaozhufangshi, gongchengname, tantadu, kangshendengji, shigongbuwei, xianchangtantadu, daodatime, chehao, siji, checi, bencifangliang, maozhong, pizhong, jingzhong, leiji, beizhu)
+    values (#{id},#{createtime},#{jiliangdanwei},#{shouhuodanwei},#{dengjiqiangdu},#{jiaozhufangshi},#{gongchengname},#{tantadu},#{kangshendengji},#{shigongbuwei},#{xianchangtantadu},#{daodatime},#{chehao},#{siji},#{checi},#{bencifangliang},#{maozhong},#{pizhong},#{jingzhong},#{leiji},#{beizhu});
+        </insert>
+
+
+    <delete id="delById">
+        DELETE FROM chuhuodan  WHERE id=#{value}
+    </delete>
+
+    <select id="findChuHuoDanById" resultType="bean.ChuHuoDan">
+        SELECT * FROM chuhuodan WHERE id=#{value}
+    </select>
+
+    <update id="updateItemById" parameterType="bean.ChuHuoDan">
+        update chuhuodan set
+         jiliangdanwei=#{jiliangdanwei},
+         shouhuodanwei=#{shouhuodanwei},
+         dengjiqiangdu=#{dengjiqiangdu},
+         jiaozhufangshi=#{jiaozhufangshi},
+         gongchengname=#{gongchengname},
+         tantadu=#{tantadu},
+         kangshendengji=#{kangshendengji},
+          shigongbuwei=#{shigongbuwei},
+          xianchangtantadu=#{xianchangtantadu},
+          daodatime=#{daodatime},
+          chehao=#{chehao},
+          siji=#{siji},
+          checi=#{checi},
+          bencifangliang=#{bencifangliang},
+          maozhong=#{maozhong},
+          pizhong=#{pizhong},
+          jingzhong=#{jingzhong},
+          leiji=#{leiji},
+          beizhu=#{beizhu}
+         where id=#{id}
+    </update>
+
+    <select id="findAll" resultType="bean.ChuHuoDan">
+        SELECT * FROM chuhuodan ORDER BY createtime DESC limit #{pageNum},#{pageSize}
+    </select>
+    <select id="findCount" resultType="java.lang.Integer">
+     select count(id) from chuhuodan;
+    </select>
+   	<select id="findAllByCountName" parameterType="java.util.Map" resultType="bean.ChuHuoDan" >
+ 	<!-- 		SELECT * FROM chuhuodan WHERE siji LIKE  '%张%' ORDER BY createtime DESC limit 0,5; -->
+    	SELECT * FROM chuhuodan WHERE siji LIKE  ${moHuName} ORDER BY createtime DESC limit ${pageNum},${pageSize}
+   	
+   	</select>
+
+</mapper>
