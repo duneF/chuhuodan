@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <!-- 配置注解方式的处理器映射器和适配器 -->
+    <mvc:annotation-driven conversion-service="conversionService" validator="validator"/>
+
+    <!-- (1)这里! 配置自己前后路径 -->
+    <!-- 配置视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="jsp/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+
+    <!-- (2)这里! 加载自己controller包 -->
+    <context:component-scan base-package="controller"></context:component-scan>
+    <!-- 自定义类型转换器 -->
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="converters">
+            <list>
+                <!-- <bean class="com.weixin.jiyun.converter.MyDateConverter"/> -->
+            </list>
+        </property>
+    </bean>
+
+    <!-- 配置validation校验器 -->
+    <bean id="validator"
+          class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <!-- validation校验框架的提供类 -->
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"></property>
+        <!-- 指定校验信息的配置文件 -->
+        <property name="validationMessageSource" ref="validationMessageSource"></property>
+    </bean>
+
+    <bean id="validationMessageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <!-- 校验信息的基本名称 ,默认使用的就是properties文件 -->
+        <property name="basenames">
+            <list>
+                <value>validationMessage</value>
+            </list>
+        </property>
+        <!-- 文件编码 -->
+        <property name="fileEncodings" value="utf8"></property>
+    </bean>
+    <!-- 配置文件上传 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 配置文件上传的最大值 5M-->
+        <property name="maxUploadSize" value="5242880"></property>
+    </bean>
+</beans>
