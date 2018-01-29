@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 读取java的配置文件 -->
+    <context:property-placeholder location="/config/db.properties" />
+
+    <!-- 配置数据源 -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${db.driver}" />
+        <property name="url" value="${db.url}" />
+        <property name="username" value="${db.username}" />
+        <property name="password" value="${db.password}" />
+        <property name="maxActive" value="10" />
+        <property name="maxIdle" value="5" />
+    </bean>
+
+    <!-- 配置SqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- (1)这里!这里!这里! 配置指定mybatis的配置文件 -->
+        <property name="configLocation" value="classpath:/config/SqlMapConfig.xml"></property>
+        <!-- 配置数据源 -->
+        <property name="dataSource" ref="dataSource"></property>
+
+        <!-- (2)这里!这里!这里! 批量起别名配置自己的起别名的包 -->
+        <property name="typeAliasesPackage" value="bean"></property>
+    </bean>
+
+
+    <!-- 配置批量生成mapper代理对象 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- (3)这里!这里!这里! 配置自己接口以及映射文件所在的包 -->
+        <property name="basePackage" value="mapper"/>
+    </bean>
+</beans>
